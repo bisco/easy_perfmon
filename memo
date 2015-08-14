@@ -1,0 +1,55 @@
+目標：
+    Linuxの統計情報をブラウザからグラフィカルに見えるようにする
+
+調査：
+    sar: 万能システムモニタ
+        -A: 全部取る(多すぎる感)
+        -B: ページング情報を取る
+        -b: ディスクI/O(合計)
+        -d: ディスクI/O
+            -pと組み合わせて、/dev/sdXの形式に表示できる
+        -P: プロセッサ指定
+            -P 0 で CPU#0のみ
+            -P ALL で全CPU
+        -m: -m CPU で、CPUの動作周波数を
+        
+        プロセッサの動作周波数、プロセッサ使用率、ディスクI/Oをまとめて表示
+        sar -d -p -P ALL -m CPU -u <INTERVAL> <REPEAT_TIMES>
+
+        -o: fileに保存(バイナリ形式)。とれる限りの全ての情報を保存する。
+        sar -o filename
+
+    iostat: ディスクへのI/Oモニタ
+        iostat -x 1 で 1秒毎にモニタ表示
+        iostat -x 1 1 で 1秒毎に合計1回モニタ表示
+               -m で MB単位(k=1024?)
+               -t で タイムスタンプ表示
+        iostat -x -t 1 <回数> で 取るのが良さそう
+
+    mpstat: プロセッサ使用率モニタ
+        mpstat -A で全情報を取る(基本的にはこれでよさそう)
+
+    pidstat: プロセスごとのモニタ
+        -l: プロセスの引数も表示
+        -d: プロセスのI/Oを表示
+    
+    ps: プロセスのスナップショット取得
+        top的にも使える。
+        ps -aeo pid,tid,uname,class,rtprio,ni,pri,psr,pcpu,pmem,stat,wchan:32,args
+
+
+    dmesg: カーネルとかデーモンの出すメッセージ集
+        dmesg > dmesg.txt
+
+    cpuinfo: /procの下
+        cat /proc/cpuinfo > cpuinfo.txt
+
+    meminfo: /proc/meminfo > meminfo.txt
+
+    iomem: /proc/iomem > iomem.txt
+
+    netstat: IPネットワーク周りのstat
+        netstat -aneo
+
+    vmstat: メモリまわり
+        vmstat -w(幅広表示できる)
