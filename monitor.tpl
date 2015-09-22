@@ -12,11 +12,13 @@
         margin-bottom: 1px;
       }
     </style>
-    <link rel="stylesheet" type="text/css" href="static/epoch.min.css">
     <script type="text/javascript" src="static/jquery.js"></script>
     <script type="text/javascript" src="static/smoothie.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="static/epoch.min.css">
     <script type="text/javascript" src="static/d3.min.js"></script>
     <script type="text/javascript" src="static/epoch.min.js"></script>
+
     <script type="text/javascript" src="static/server_load.js"></script>
     
   </head>
@@ -29,7 +31,7 @@
     <div id="myarea" class="epoch category10" style="width: 400px;height: 300px;"></div>
 
     <h4>epoch gauge</h4>
-    <div id="gaugeChart" class="epoch gauge-small"></div>
+    <div id="gaugeChart" class="epoch gauge-tiny" style="width: 400px; height: 300px"></div>
 
   </body>
 </html>
