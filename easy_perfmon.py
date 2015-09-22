@@ -13,7 +13,8 @@ def get_num_of_cpus():
 
 
 @route('/')
-@view("monitor")
+#@view("monitor")
+@view("index-bootstrap")
 def index():
     server_resource = {}
     server_resource["num_of_cpus"] = get_num_of_cpus()

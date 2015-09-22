@@ -15,6 +15,12 @@
     <script type="text/javascript" src="static/jquery.js"></script>
     <script type="text/javascript" src="static/smoothie.js"></script>
 
+    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="static/bootstrap/css/bootstrap-theme.min.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script type="text/javascript" src="static/bootstrap/css/bootstrap-theme.min.css">
+
     <!--<link rel="stylesheet" type="text/css" href="static/epoch.min.css"> -->
     <!--<script type="text/javascript" src="static/d3.min.js"></script>     -->
     <!--<script type="text/javascript" src="static/epoch.min.js"></script>  -->
@@ -30,7 +36,6 @@
                 <h4>CPU #{{i}}</h4>
             %end
                 <canvas id="mpstat{{i}}" width="500" height="300"></canvas>
-
         %end
     <!-- <h4>epoch</h4> -->
     <!-- <div id="myarea" class="epoch category10" style="width: 400px;height: 300px;"></div> -->
