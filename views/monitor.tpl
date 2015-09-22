@@ -28,7 +28,7 @@
                 <h4>ALL</h4>
             %else:
                 <h4>CPU #{{i}}</h4>
-			%end
+            %end
                 <canvas id="mpstat{{i}}" width="500" height="300"></canvas>
 
         %end
