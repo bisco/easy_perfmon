@@ -7,37 +7,48 @@ import subprocess
 
 VERSION = "0.1"
 
+
+def get_num_of_cpus():
+    return int(subprocess.check_output("grep -c processor /proc/cpuinfo".strip().split(" ")))
+
+
 @route('/')
 @view("monitor")
 def index():
-    init()
-    return
-
-def init():
-    os.environ["LANG"] = "C"
+    server_resource = {}
+    server_resource["num_of_cpus"] = get_num_of_cpus()
+    return dict(server_resource=server_resource)
 
 
 @route("/static/<filepath:path>")
 def static(filepath):
     return static_file(filepath,root="./static")
 
+
 @route('/json/version')
 def version():
     response.content_type = "application/json"
     return {"version": VERSION}
+
+@route('/json/num_of_cpus')
+def num_of_cpus():
+    return {"num_of_cpus": get_num_of_cpus()}
 
 
 MPSTAT_FORMAT = ("time", "cpuid", "%usr", "%nice", "%sys", "%iowait", "%irq", 
                  "%soft", "%steal", "%guest", "%gnice", "%idle",) 
 @route('/json/mpstat')
 def mpstat():
+    os.environ["LANG"] = "C"
     response.content_type = "application/json"
     json = {}
-    mpstat_result = subprocess.check_output("mpstat -P ALL".strip().split(" "))
+    mpstat_result = subprocess.check_output("mpstat -P ALL 1 1".strip().split(" "))
 
     for i in mpstat_result.split("\n"):
         line = re.sub(r' +', r' ', i).strip().split(" ")
         if len(line) != len(MPSTAT_FORMAT) or line[1] == "CPU":
+            continue
+        elif line[0].find("Average") >= 0:
             continue
         else:
             json[line[1]] = {}
@@ -52,9 +63,10 @@ IOSTAT_FORMAT = ('Device', 'rrqm/s', 'wrqm/s', 'r/s', 'w/s', 'rkB/s', 'wkB/s', '
                  'avgqu-sz', 'await', 'r_await', 'w_await', 'svctm', '%util', )
 @route('/json/iostat')
 def iostat():
+    os.environ["LANG"] = "C"
     response.content_type = "application/json"
     json = {}
-    iostat_result = subprocess.check_output("iostat -x".strip().split(" "))
+    iostat_result = subprocess.check_output("iostat -x 1 1".strip().split(" "))
 
     for i in iostat_result.split("\n"):
         line = re.sub(r' +', r' ', i).replace(":","").strip().split(" ")
@@ -72,9 +84,10 @@ def iostat():
 CPUFREQ_FORMAT = ('time', 'cpuid', 'freq',)
 @route('/json/cpufreq')
 def iostat():
+    os.environ["LANG"] = "C"
     response.content_type = "application/json"
     json = {}
-    p = subprocess.Popen("sar -m CPU -P ALL 0", shell=True, 
+    p = subprocess.Popen("sar -m CPU -P ALL 1 1", shell=True, 
                           stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     cpufreq_result = p.stdout.read()
     
@@ -90,14 +103,15 @@ def iostat():
                 json[line[1]][name] = value
     return json
 
+
 VMSTAT_FORMAT = ('r','b', 'swpd', 'free', 'buff', 'cache', 'si', 'so',
                  'bi', 'bo', 'in', 'cs', 'us', 'sy', 'id', 'wa', 'st')
 @route('/json/vmstat')
-def iostat():
+def vmstat():
+    os.environ["LANG"] = "C"
     response.content_type = "application/json"
     json = {}
     vmstat_result = subprocess.check_output("vmstat".strip().split(" "))
-
     
     for i in vmstat_result.split("\n"):
         line = re.sub(r' +', r' ', i).strip().split(" ")
@@ -116,5 +130,6 @@ def main():
     else:
         port = int(sys.argv[1])
     run(host='0.0.0.0', port=port)
+
 
 main()
