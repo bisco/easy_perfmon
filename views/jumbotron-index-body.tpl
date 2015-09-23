@@ -1,5 +1,5 @@
 % rebase("bootstrap-base.tpl",title="easy_perfmon.py")
-% include("bootstrap-header.tpl", navbar_brand="easy_perfmon.py:system summary")
+% include("jumbotron-header.tpl", navbar_brand="easy_perfmon.py:system summary")
 
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="jumbotron">
@@ -37,10 +37,17 @@
             </tr>
           </table>
           <canvas id="iostat_all"></canvas>
+          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
       </div>
         <div class="col-md-4">
           <h2>vmstat</h2>
-          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+          <table>
+           <tr>
+             <td> <span class="caption-usr">rkB/s</span> </td>
+             <td> <span class="caption-sys">wkB/s</span> </td>
+           </tr>
+          </table>
+          <canvas id="iostat_all"></canvas>
           <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
         </div>
       </div> <!-- /container/row -->

@@ -15,7 +15,9 @@
     <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="static/jumbotron.css" rel="stylesheet">
+    <!-- <link href="static/jumbotron.css" rel="stylesheet"> -->
+	<link href="static/css/dashboard.css" rel="stylesheet">
+	<link href="static/css/graph.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -30,7 +32,7 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> -->
-    <script src="static/jquery-1.11.3.min.js"></script>
+    <script src="static/js/jquery-1.11.3.min.js"></script>
     <script src="static/bootstrap/js/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <!-- <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script> -->

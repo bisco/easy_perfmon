@@ -11,10 +11,14 @@ VERSION = "0.1"
 def get_num_of_cpus():
     return int(subprocess.check_output("grep -c processor /proc/cpuinfo".strip().split(" ")))
 
+def get_memsize():
+    meminfo = subprocess.check_output("grep MemTotal /proc/meminfo".strip().split(" "))
+    return int(re.sub(r' +', r' ', meminfo).split(" ")[1])
+    
 
 @route('/')
 #@view("monitor")
-@view("index-bootstrap")
+@view("dashboard-index-body")
 def index():
     server_resource = {}
     server_resource["num_of_cpus"] = get_num_of_cpus()
@@ -34,6 +38,12 @@ def version():
 @route('/json/num_of_cpus')
 def num_of_cpus():
     return {"num_of_cpus": get_num_of_cpus()}
+
+
+@route('/json/memsize')
+def num_of_cpus():
+    return {"memsize": get_memsize()}
+
 
 
 MPSTAT_FORMAT = ("time", "cpuid", "%usr", "%nice", "%sys", "%iowait", "%irq", 
@@ -67,14 +77,16 @@ def iostat():
     os.environ["LANG"] = "C"
     response.content_type = "application/json"
     json = {}
-    iostat_result = subprocess.check_output("iostat -x 1 1".strip().split(" "))
+    iostat_result = subprocess.check_output("iostat -x 1 2".strip().split(" "))
 
     for i in iostat_result.split("\n"):
         line = re.sub(r' +', r' ', i).replace(":","").strip().split(" ")
         if len(line) != len(IOSTAT_FORMAT) or line[0] == "Device":
             continue
         else:
-            json[line[0]] = {}
+            if line[0] not in json.keys():
+                json[line[0]] = {}
+                continue
             for name, value in zip(IOSTAT_FORMAT, line):
                 if name == IOSTAT_FORMAT[0]:
                     continue
@@ -84,7 +96,7 @@ def iostat():
 
 CPUFREQ_FORMAT = ('time', 'cpuid', 'freq',)
 @route('/json/cpufreq')
-def iostat():
+def cpufreq():
     os.environ["LANG"] = "C"
     response.content_type = "application/json"
     json = {}
@@ -116,7 +128,6 @@ def vmstat():
     
     for i in vmstat_result.split("\n"):
         line = re.sub(r' +', r' ', i).strip().split(" ")
-        print line
         if len(line) != len(VMSTAT_FORMAT) or line[0] == "r":
             continue
         else:
