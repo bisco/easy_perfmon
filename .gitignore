@@ -1,4 +1,4 @@
 static/d3*
 static/*.zip
 static/epoch*
-
+*/*.swp

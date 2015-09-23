@@ -105,7 +105,7 @@ $(function(){
                                 fillStyle: fill_color[i], lineWidth: 2 });
         }
         canvas_name = "iostat_all";
-        smoothie.streamTo(document.getElementById(canvas_name), 500);
+        smoothie.streamTo(document.getElementById(canvas_name), 0);
     })();
 
     (function(){

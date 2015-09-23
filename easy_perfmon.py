@@ -20,9 +20,20 @@ def get_memsize():
 #@view("monitor")
 @view("dashboard-index-body")
 def index():
+    #server_resource = {}
+    #server_resource["num_of_cpus"] = get_num_of_cpus()
+    #return dict(server_resource=server_resource)
+    return
+
+
+@route('/mpstat')
+#@view("monitor")
+@view("dashboard-mpstat-body")
+def index():
     server_resource = {}
     server_resource["num_of_cpus"] = get_num_of_cpus()
     return dict(server_resource=server_resource)
+
 
 
 @route("/static/<filepath:path>")
