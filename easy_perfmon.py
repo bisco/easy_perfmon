@@ -15,15 +15,23 @@ def get_memsize():
     meminfo = subprocess.check_output("grep MemTotal /proc/meminfo".strip().split(" "))
     return int(re.sub(r' +', r' ', meminfo).split(" ")[1])
     
+def get_cpumodel():
+    model_name = (subprocess.check_output('grep CPU /proc/cpuinfo'.split(" ")).split("\n"))[0]
+    return re.sub(r' +',r' ', (model_name.split("\n")[0].split(":")[1])).strip()
+
 
 @route('/')
 #@view("monitor")
 @view("dashboard-index-body")
 def index():
-    #server_resource = {}
-    #server_resource["num_of_cpus"] = get_num_of_cpus()
-    #return dict(server_resource=server_resource)
-    return
+    server_resource = {}
+    server_resource["num_of_cpus"] = get_num_of_cpus()
+    uname = os.uname()
+    server_resource["hostname"] = uname[1]
+    server_resource["kernel_ver"] = " ".join([uname[2],uname[3],uname[4]])
+    server_resource["cpu_model"] = get_cpumodel()
+    server_resource["memsize"] = get_memsize()
+    return dict(server_resource=server_resource)
 
 
 @route('/mpstat')
@@ -32,8 +40,8 @@ def index():
 def index():
     server_resource = {}
     server_resource["num_of_cpus"] = get_num_of_cpus()
-    return dict(server_resource=server_resource)
-
+    hostname = os.uname()[1]
+    return dict(server_resource=server_resource, hostname=hostname)
 
 
 @route("/static/<filepath:path>")
@@ -52,7 +60,7 @@ def num_of_cpus():
 
 
 @route('/json/memsize')
-def num_of_cpus():
+def memsize():
     return {"memsize": get_memsize()}
 
 

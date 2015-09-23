@@ -7,17 +7,16 @@
         %include("dashboard-sidebar.tpl", current="mpstat")
         </div> <!-- /row/sidebar -->
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Dashboard: mpstat</h1>
+          <h1 class="page-header">{{hostname or "Dashboard"}}: mpstat</h1>
 
           <div class="row placeholders">
             %for i in range(server_resource["num_of_cpus"]+1):
               %if i == 0:
                 <div class="col-xs-12 col-sm-12 placeholder">
-                  <table style="margin: 0 auto">                                                                             
               %else:
                 <div class="col-xs-4 col-sm-4 placeholder">
-                  <table>                                                                             
               %end
+                  <table style="margin: 0 auto">                                                                             
                     <tr>                                                                               
                       <td> <span class="caption-usr">%usr</span> </td>                                 
                       <td> <span class="caption-sys">%sys</span> </td>                                 
