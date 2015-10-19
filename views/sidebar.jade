@@ -1,0 +1,14 @@
+ul.nav.nav-sidebar
+  -
+    content = { "Overview":"/", 
+        "mpstat":"mpstat", 
+        "iostat":"iostat", 
+        "vmstat":"vmstat", 
+        "cpufreq":"cpufreq" 
+    };
+
+  each val, key in content
+    li(class={active: key === current})
+      a(href="#{val}") #{key}
+      if key === current
+        span.sr-only (current)

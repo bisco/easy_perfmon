@@ -1,0 +1,22 @@
+mixin navbar-li(name,link)
+  li
+    a(href= link)= name
+
+nav.navbar.navbar-inverse.navbar-fixed-top
+  .container-fluid
+    .navbar-header
+      button(type="button", data-toggle="collapse", data-target="#navbar", 
+             aria-expanded="false", aria-controls="navbar").navbar-toggle.collapsed
+        span.sr-only Toggle navigation
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      a(class="navbar-brand" href="#") easy_perfmon
+    #navbar.navbar-collapse.collapse
+      ul.nav.navbar-nav.navbar-right
+        //- +navbar-li("Dashboard", "#")
+        //- +navbar-li("Settings", "#")
+        //- +navbar-li("Profile", "#")
+        //- +navbar-li("Help", "#")
+      form.navbar-form.navbar-right
+        //- input(type="text", placeholder="Search...").form-control

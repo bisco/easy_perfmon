@@ -1,0 +1,22 @@
+doctype
+html(lang="en")
+  head
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible" content="IE=edge")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    title #{title}
+    link(rel="stylesheet", href="/lib/css/bootstrap/bootstrap.min.css")
+    link(rel='stylesheet', href='/stylesheets/dashboard.css')
+    link(rel='stylesheet', href='/stylesheets/graph_caption.css')
+  body
+    include ./header.jade
+    .container-fluid
+      .row
+        .col-sm-3.col-md-2.sidebar
+          include ./sidebar.jade
+        .col-sm-3.col-sm-offset-3.col-md-10.col-md-offset-2.main
+          block content
+    script(src="/lib/js/jquery-1.11.3/jquery.min.js")
+    script(src="/lib/js/bootstrap/bootstrap.min.js")
+    script(src="/lib/js/smoothie/smoothie.js")
+    block script

@@ -1,0 +1,43 @@
+extends ./layout.jade
+
+mixin graph(title,graph_id)
+  .col-xs-4.col-sm-4.placeholder
+    table
+      tr
+        td
+          span.caption-usr %usr
+        td
+          span.caption-sys %sys
+        td
+          span.caption-iowait %idle
+        //- td
+        //-   span.caption-irq %irq
+    h4= title
+    canvas(id=graph_id)
+    span.text-muted
+    if block
+      block
+
+mixin server_param(description, value)
+  tr
+    td #{description}
+    td #{value}
+
+block content
+  h1.page-header System overview of #{hostname}
+  .row.placeholders 
+    +graph(mpstat, "mpstat_total")
+    +graph(iostat, "iostat_total")
+    +graph(vmstat, "vmstat_total")
+
+  h2.sub-header Server Information
+
+  .table-responsive
+    table.table.table-striped
+      tbody
+        +server_param("hostname", hostname)
+        +server_param("kernel version", kernel_ver) 
+        +server_param("Memory size (KB)", memsize)
+
+block script
+  script(src="/js/perfmon_index.js")
