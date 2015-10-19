@@ -1,0 +1,44 @@
+{
+  "name": "easy_perfmon",
+  "version": "0.0.1",
+  "authors": [
+    "bisco <mail@nbis.co>"
+  ],
+  "description": "express test",
+  "main": "app.js",
+  "moduleType": [],
+  "keywords": [
+    "express_test"
+  ],
+  "license": "MIT",
+  "homepage": "twitter.com/nbisco",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "jquery-1.11.3": "jquery#1.11.3",
+    "bootstrap": "~3.3.5",
+    "smoothie": "~1.27.0"
+  },
+  "exportsOverride": {
+    "bootstrap": {
+      "css": "dist/**/*.css",
+      "js": "dist/**/*.js"
+    },
+    "jquery": {
+      "js": "dist/*.js"
+    },
+    "jquery-1.11.3": {
+      "js": "dist/*.js"
+    },
+    "smoothie": {
+      "js": "*.js"
+    }
+  }
+}
