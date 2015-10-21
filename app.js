@@ -13,7 +13,17 @@ function compile(str, path) {
 
 var child_process = require("child_process");
 var child = child_process.fork("./cpu_usage");
-var cpu_usage;
+
+// init cpu_usage
+var cpu_usage = {user: [], sys: [], idle: [], irq: [], nice: []};
+for(var i=0;i<Object.keys(os.cpus()).length;i++) {
+    cpu_usage["user"].push(0);
+    cpu_usage["sys"].push(0);
+    cpu_usage["nice"].push(0);
+    cpu_usage["idle"].push(0);
+    cpu_usage["irq"].push(0);
+}
+
 child.on("message", function (msg) {
   cpu_usage = msg;
 });
@@ -58,17 +68,25 @@ app.get("/json/mpstat_total", function(req, res) {
   var total = user = sys = nice = idle = irq = 0;
 
   for(var i=0;i<Object.keys(os.cpus()).length;i++) {
-    user += cpu_usage["user"][i];
-    sys  += cpu_usage["sys"][i];
-    nice += cpu_usage["nice"][i];
-    idle += cpu_usage["idle"][i];
-    irq  += cpu_usage["irq"][i];
-    total += (user + sys + nice + idle + irq);
+    user  += cpu_usage["user"][i];
+    sys   += cpu_usage["sys"][i];
+    nice  += cpu_usage["nice"][i];
+    idle  += cpu_usage["idle"][i];
+    irq   += cpu_usage["irq"][i];
   }
+  total = user + sys + nice + idle + irq;
   user = Math.round(10000 * user / total) / 100;
   sys  = Math.round(10000 *  sys / total) / 100;
   idle = Math.round(10000 * idle / total) / 100;
-  res.send(JSON.stringify({user:user, sys:sys, idle:idle}));
+  nice = Math.round(10000 * nice / total) / 100;
+  irq  = Math.round(10000 *  irq / total) / 100;
+  res.send(JSON.stringify({user:user, sys:sys, idle:idle, irq:irq, nice:nice}));
+}); 
+
+app.get("/json/loadavg", function(req, res) {
+  res.contentType('application/json');
+  loadavg = os.loadavg();
+  res.send(JSON.stringify({"1min": loadavg[0], "5min": loadavg[1], "15min": loadavg[2]}));
 }); 
 
 

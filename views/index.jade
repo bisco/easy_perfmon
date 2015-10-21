@@ -1,18 +1,18 @@
 extends ./layout.jade
 
-mixin graph(title,graph_id)
+mixin graph(title, graph_id, cap1, cap2, cap3)
   .col-xs-4.col-sm-4.placeholder
+    h4= title
     table
       tr
         td
-          span.caption-usr %usr
+          span.caption-usr= cap1
         td
-          span.caption-sys %sys
+          span.caption-sys= cap2
         td
-          span.caption-iowait %idle
+          span.caption-iowait= cap3
         //- td
         //-   span.caption-irq %irq
-    h4= title
     canvas(id=graph_id)
     span.text-muted
     if block
@@ -26,9 +26,9 @@ mixin server_param(description, value)
 block content
   h1.page-header System overview of #{hostname}
   .row.placeholders 
-    +graph(mpstat, "mpstat_total")
-    +graph(iostat, "iostat_total")
-    +graph(vmstat, "vmstat_total")
+    +graph("mpstat",  "mpstat_total", "%usr", "%sys", "%idle")
+    +graph("Load average", "loadavg", "1min", "5min", "15min")
+    //- +graph(vmstat, "vmstat_total")
 
   h2.sub-header Server Information
 

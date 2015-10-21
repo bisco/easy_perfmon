@@ -1,6 +1,5 @@
-static/d3*
-static/*.zip
-static/epoch*
 */*.swp
-*/*.pyc
-*.pyc
+*.swp
+public/lib
+bower_components
+node_modules
