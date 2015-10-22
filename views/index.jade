@@ -28,7 +28,7 @@ block content
   .row.placeholders 
     +graph("mpstat",  "mpstat_total", "%usr", "%sys", "%idle")
     +graph("Load average", "loadavg", "1min", "5min", "15min")
-    //- +graph(vmstat, "vmstat_total")
+    +graph("diskstat", "diskstat_total", "rB/s", "wB/s", "")
 
   h2.sub-header Server Information
 

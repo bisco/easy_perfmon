@@ -2,16 +2,8 @@ var async = require('async');
 var os = require("os");
 var cpus = os.cpus();
 var num_of_cpus = Object.keys(cpus).length;
-var usr = [],
-    sys = [],
-    irq = [],
-    idle = [],
-    nice = [];
-var usr_prev = [],
-    sys_prev = [],
-    irq_prev = [],
-    idle_prev = [],
-    nice_prev = [];
+var usr = [], sys = [], irq = [], idle = [], nice = [];
+var usr_prev = [], sys_prev = [], irq_prev = [], idle_prev = [], nice_prev = [];
 
 for(var i=0;i<num_of_cpus;i++) {
   usr.push(0);
