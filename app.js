@@ -17,7 +17,7 @@ var child_diskstat = child_process.fork("./diskstat");
 
 // init cpu_usage
 var cpu_usage = {user: [], sys: [], idle: [], irq: [], nice: []};
-for(var i=0;i<Object.keys(os.cpus()).length;i++) {
+for(var i=0;i<os.cpus().length;i++) {
     cpu_usage["user"].push(0);
     cpu_usage["sys"].push(0);
     cpu_usage["nice"].push(0);
@@ -49,15 +49,23 @@ app.get("/", function(req, res){
         current: "Overview", 
         hostname: os.hostname(), 
         kernel_ver: os.release(), 
-        memsize: os.totalmem() / 1024
+        memsize: os.totalmem() / 1024,
+        cpu_type: (os.cpus()[0]["model"]).replace(/ +/, " "),
+        num_of_cpus: os.cpus().length
       }
     );
 });
 
 app.get("/json/num_of_cpus", function(req, res) {
   res.contentType('application/json');
-  var num_of_cpus = {num_of_cpus: Object.keys(os.cpus()).length};
+  var num_of_cpus = {num_of_cpus: os.cpus().length};
   res.send(JSON.stringify(num_of_cpus));
+}); 
+
+app.get("/json/cpu_model", function(req, res) {
+  res.contentType('application/json');
+  var cpu_model = {cpu_model: os.cpus()[0]["model"]};
+  res.send(JSON.stringify(cpu_model));
 }); 
 
 app.get("/json/memsize", function(req, res) {

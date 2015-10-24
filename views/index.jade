@@ -26,9 +26,9 @@ mixin server_param(description, value)
 block content
   h1.page-header System overview of #{hostname}
   .row.placeholders 
-    +graph("mpstat",  "mpstat_total", "%usr", "%sys", "%idle")
+    +graph("CPU usage",  "mpstat_total", "%usr", "%sys", "%idle")
     +graph("Load average", "loadavg", "1min", "5min", "15min")
-    +graph("diskstat", "diskstat_total", "rB/s", "wB/s", "")
+    +graph("Disk I/O", "diskstat_total", "rB/s", "wB/s", "")
 
   h2.sub-header Server Information
 
@@ -37,7 +37,10 @@ block content
       tbody
         +server_param("hostname", hostname)
         +server_param("kernel version", kernel_ver) 
-        +server_param("Memory size (KB)", memsize)
+        +server_param("cpu model", cpu_type)
+        +server_param("number of cores", num_of_cpus)
+        +server_param("memory size (KiB)", memsize)
+
 
 block script
   script(src="/js/perfmon_index.js")
