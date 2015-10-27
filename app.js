@@ -14,6 +14,7 @@ function compile(str, path) {
 var child_process = require("child_process");
 var child_cpuusage = child_process.fork("./cpu_usage");
 var child_diskstat = child_process.fork("./diskstat");
+var child_netstat = child_process.fork("./netstat");
 
 // init cpu_usage
 var cpu_usage = {user: [], sys: [], idle: [], irq: [], nice: []};
@@ -34,6 +35,12 @@ child_cpuusage.on("message", function (msg) {
 var diskstat_total = {r_bytes:0, w_bytes:0}
 child_diskstat.on("message", function (msg) {
   diskstat_total = msg;
+});
+
+// init netstat_total
+var netstat_total = {r_bytes:0, w_bytes:0}
+child_netstat.on("message", function (msg) {
+  netstat_total = msg;
 });
 
 app.set("views", __dirname+"/views"); app.set("view engine","jade");
@@ -108,6 +115,11 @@ app.get("/json/loadavg", function(req, res) {
 app.get("/json/diskstat_total", function(req, res) {
   res.send(JSON.stringify(diskstat_total));
 }); 
+
+app.get("/json/netstat_total", function(req, res) {
+  res.send(JSON.stringify(netstat_total));
+}); 
+
 
 
 app.listen(3000);

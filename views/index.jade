@@ -27,7 +27,8 @@ block content
   h1.page-header System overview of #{hostname}
   .row.placeholders 
     +graph("CPU usage",  "mpstat_total", "%usr", "%sys", "%idle")
-    +graph("Load average", "loadavg", "1min", "5min", "15min")
+    +graph("Network I/O", "netstat_total", "recv(B/s)", "send(B/s)", "")
+    //- +graph("Load average", "loadavg", "1min", "5min", "15min")
     +graph("Disk I/O", "diskstat_total", "rB/s", "wB/s", "")
 
   h2.sub-header Server Information
