@@ -1,5 +1,7 @@
 */*.swp
 *.swp
 public/lib
+public/stylesheets/*.css
+views/*.html
 bower_components
 node_modules

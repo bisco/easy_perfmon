@@ -1,19 +1,20 @@
 extends ./layout.jade
 
-mixin graph(title, graph_id, cap1, cap2, cap3)
+mixin graph(title, graph_id, placeholder_id)
   .col-xs-4.col-sm-4.placeholder
     h4= title
-    table
-      tr
-        td
-          span.caption-usr= cap1
-        td
-          span.caption-sys= cap2
-        td
-          span.caption-iowait= cap3
-        //- td
-        //-   span.caption-irq %irq
-    canvas(id=graph_id)
+    div(id=placeholder_id)
+    //- table
+    //-   tr
+    //-     td
+    //-       span.caption-usr= cap1
+    //-     td
+    //-       span.caption-sys= cap2
+    //-     td
+    //-       span.caption-iowait= cap3
+    //-     //- td
+    //-     //-   span.caption-irq %irq
+    div(id=graph_id).graph-placeholder
     span.text-muted
     if block
       block
@@ -26,10 +27,10 @@ mixin server_param(description, value)
 block content
   h1.page-header System overview of #{hostname}
   .row.placeholders 
-    +graph("CPU usage",  "mpstat_total", "%usr", "%sys", "%idle")
-    +graph("Network I/O", "netstat_total", "recv(B/s)", "send(B/s)", "")
+    +graph("CPU usage",  "mpstat_total", "mpstat_legend")
+    //- +graph("Network I/O", "netstat_total", "recv(B/s)", "send(B/s)", "")
     //- +graph("Load average", "loadavg", "1min", "5min", "15min")
-    +graph("Disk I/O", "diskstat_total", "rB/s", "wB/s", "")
+    //- +graph("Disk I/O", "diskstat_total", "rB/s", "wB/s", "")
 
   h2.sub-header Server Information
 
@@ -44,4 +45,4 @@ block content
 
 
 block script
-  script(src="/js/perfmon_index.js")
+  script(src="/js/perfmon_index_flot.js")
