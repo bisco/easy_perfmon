@@ -24,7 +24,6 @@
     "jquery": "~2.1.4",
     "jquery-1.11.3": "jquery#1.11.3",
     "bootstrap": "~3.3.5",
-    "smoothie": "~1.27.0",
     "Flot": "flot#~0.8.3"
   },
   "exportsOverride": {
@@ -37,9 +36,6 @@
     },
     "jquery-1.11.3": {
       "js": "dist/*.js"
-    },
-    "smoothie": {
-      "js": "*.js"
     },
     "Flot": {
       "js": "*.js"
