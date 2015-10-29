@@ -3,16 +3,6 @@ extends ./layout.jade
 mixin graph(title, graph_id, placeholder_id)
   .col-xs-4.col-sm-4.placeholder
     h4= title
-    //- table
-    //-   tr
-    //-     td
-    //-       span.caption-usr= cap1
-    //-     td
-    //-       span.caption-sys= cap2
-    //-     td
-    //-       span.caption-iowait= cap3
-    //-     //- td
-    //-     //-   span.caption-irq %irq
     div(id=placeholder_id).legend-placeholder
     div(id=graph_id).graph-placeholder
     span.text-muted
@@ -45,4 +35,4 @@ block content
 
 
 block script
-  script(src="/js/perfmon_index_flot.js")
+  script(src="/js/perfmon_index.js")
