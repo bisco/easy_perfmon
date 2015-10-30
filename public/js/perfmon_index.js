@@ -8,7 +8,7 @@ $(function(){
     var plots = [];
     var placeholders = ["#mpstat_total", "#diskstat_total", "#netstat_total"];
     var leg_placeholders = ["#mpstat_legend", "#diskstat_legend", "#netstat_legend"];
-    var _TOTAL_POINTS = 50;
+    var _TOTAL_POINTS = 60;
 
     function get_json(url, data_ary, keys) {
       $.getJSON(
@@ -17,7 +17,7 @@ $(function(){
           var t = (new Date()).getTime();
           for(var i=0; i<data_ary.length; i++) {
             if(data_ary[i].length > _TOTAL_POINTS) {
-              data_ary[i] = data_ary[i].slice(1);
+              data_ary[i].shift();
             }
             data_ary[i].push([t, json[keys[i]]]);
           }
