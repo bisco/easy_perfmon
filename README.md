@@ -10,6 +10,16 @@ easy_perfmon shows server status below in real time:
 - disk throughput(system total): Read Byte/s(rB/s), Write Byte/s(wB/s)
 - network throughput: recv(Byte/s), send(Byte/s)
 
+## How to install
+
+Install commands are follows:
+```bash
+$ git clone https://github.com/bisco/easy_perfmon.git
+$ npm install
+$ bower install
+$ grunt bower:install
+```
+
 
 ## Usage
 start app.js and access your-server-ip:3000 by web browser.
