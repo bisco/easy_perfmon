@@ -1,46 +1,53 @@
 var async = require('async');
 var os = require("os");
-var cpus = os.cpus();
-var num_of_cpus = Object.keys(cpus).length;
-var usr = [], sys = [], irq = [], idle = [], nice = [];
-var usr_prev = [], sys_prev = [], irq_prev = [], idle_prev = [], nice_prev = [];
 
-for(var i=0;i<num_of_cpus;i++) {
-  usr.push(0);
-  sys.push(0);
-  irq.push(0);
-  idle.push(0);
-  nice.push(0);
-  usr_prev.push(0);
-  sys_prev.push(0);
-  irq_prev.push(0);
-  idle_prev.push(0);
-  nice_prev.push(0);
+var _FILENAME = "/proc/stat"
+var _NUM_OF_CPUS = Object.keys(os.cpus()).length;
+var _STAT_COL_NAME = ["user","nice","system","idle",
+                      "iowait","irq","softirq","steal",
+                      "guest","guest_nice"];
+
+function get_stat(filename) {
+  var fs = require("fs");
+  var stats = fs.readFileSync(filename, "utf-8").trim().split("\n");
+  var result = []
+  stats.forEach(function(line) {
+    if(line.match(/cpu/)) {
+      cpustat = line.trim().replace(/ +/,' ').split(" ");
+      result.push([]);
+      var tail_idx = result.length - 1;
+      for(var i=0; i<_STAT_COL_NAME.length; i++) {
+        result[tail_idx].push(parseInt(cpustat[i+1],10));
+      }
+    }
+  });
+  return result;
 }
 
+var cur = [], prev = [];
 async.forever(function(callback) {
   async.series([
     function(callback) {
-      cpus = os.cpus();
-      for(i=0;i<num_of_cpus;i++) {
-        usr_prev[i]  = cpus[i]["times"]["user"];
-        sys_prev[i]  = cpus[i]["times"]["sys"];
-        idle_prev[i] = cpus[i]["times"]["idle"];
-        irq_prev[i]  = cpus[i]["times"]["irq"];
-        nice_prev[i] = cpus[i]["times"]["nice"];
-      }
+      prev = get_stat(_FILENAME);
       setTimeout(callback, 1000);
     },
     function(callback) {
-      cpus = os.cpus();
-      for(i=0;i<num_of_cpus;i++) {
-        usr[i]  = cpus[i]["times"]["user"] - usr_prev[i];
-        sys[i]  = cpus[i]["times"]["sys"]  - sys_prev[i];
-        idle[i] = cpus[i]["times"]["idle"] - idle_prev[i];
-        irq[i]  = cpus[i]["times"]["irq"]  - irq_prev[i];
-        nice[i] = cpus[i]["times"]["nice"] - nice_prev[i];
+      cur = get_stat(_FILENAME);
+      var msg = {}
+      var total;
+      var i,j;
+      for(i=0; i<cur.length; i++) {
+        total = 0;
+        for(j=0; j<_STAT_COL_NAME.length; j++) {
+          if(i === 0) msg[_STAT_COL_NAME[j]] = [];
+          msg[_STAT_COL_NAME[j]].push(cur[i][j]-prev[i][j]);
+          total += (cur[i][j]-prev[i][j]);
+        };
+        for(j=0; j<_STAT_COL_NAME.length; j++) {
+          msg[_STAT_COL_NAME[j]][i] = Math.round((10000 * msg[_STAT_COL_NAME[j]][i] / total)) / 100;
+        }
       }
-      process.send({user:usr, sys:sys, irq:irq, idle:idle, nice:nice});
+      process.send(msg);
       setTimeout(callback, 1000);
     },
     ], callback);

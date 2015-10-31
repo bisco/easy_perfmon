@@ -16,14 +16,20 @@ var child_cpuusage = child_process.fork("./cpu_usage");
 var child_diskstat = child_process.fork("./diskstat");
 var child_netstat = child_process.fork("./netstat");
 
+function get_zerofill_array(size) {
+  var array = [];
+  for(var i=0; i<size; i++) array.push(0);
+  return array;
+}
+
 // init cpu_usage
-var cpu_usage = {user: [], sys: [], idle: [], irq: [], nice: []};
-for(var i=0;i<os.cpus().length;i++) {
-    cpu_usage["user"].push(0);
-    cpu_usage["sys"].push(0);
-    cpu_usage["nice"].push(0);
-    cpu_usage["idle"].push(0);
-    cpu_usage["irq"].push(0);
+var _STAT_COL_NAME = ["user","nice","system","idle",           
+                      "iowait","irq","softirq","steal",        
+                      "guest","guest_nice"];
+var _NUM_OF_CPUS = Object.keys(os.cpus()).length; 
+var cpu_usage = {};
+for(var i=0; i<_STAT_COL_NAME.length ;i++) {
+  cpu_usage[_STAT_COL_NAME[i]] = get_zerofill_array(_NUM_OF_CPUS+1);
 }
 
 child_cpuusage.on("message", function (msg) {
@@ -88,22 +94,11 @@ app.get("/json/mpstat", function(req, res) {
 
 app.get("/json/mpstat_total", function(req, res) {
   res.contentType('application/json');
-  var total = user = sys = nice = idle = irq = 0;
-
-  for(var i=0;i<Object.keys(os.cpus()).length;i++) {
-    user  += cpu_usage["user"][i];
-    sys   += cpu_usage["sys"][i];
-    nice  += cpu_usage["nice"][i];
-    idle  += cpu_usage["idle"][i];
-    irq   += cpu_usage["irq"][i];
+  cpu_usage_total = {};
+  for(var i=0; i<_STAT_COL_NAME.length; i++) {
+    cpu_usage_total[_STAT_COL_NAME[i]] = cpu_usage[_STAT_COL_NAME[i]][0];
   }
-  total = user + sys + nice + idle + irq;
-  user = Math.round(10000 * user / total) / 100;
-  sys  = Math.round(10000 *  sys / total) / 100;
-  idle = Math.round(10000 * idle / total) / 100;
-  nice = Math.round(10000 * nice / total) / 100;
-  irq  = Math.round(10000 *  irq / total) / 100;
-  res.send(JSON.stringify({user:user, sys:sys, idle:idle, irq:irq, nice:nice}));
+  res.send(JSON.stringify(cpu_usage_total));
 }); 
 
 app.get("/json/loadavg", function(req, res) {

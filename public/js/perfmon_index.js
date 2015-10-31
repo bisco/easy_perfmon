@@ -2,7 +2,8 @@ $(function(){
   (function(){
     // We use an inline data source in the example, usually data would
     // be fetched from a server
-    var usr = [], sys = [], idle = [];
+    var usr = [], nice = [], sys = [], idle = [],
+        iowait = [], irq = [], softirq = [];
     var d_rBs = [], d_wBs = [];
     var n_rBs = [], n_wBs = [];
     var plots = [];
@@ -26,7 +27,8 @@ $(function(){
     }
 
     function get_data() {
-      get_json("json/mpstat_total", [usr, sys, idle], ["user", "sys", "idle"]);
+      get_json("json/mpstat_total", [usr, nice, sys, idle, iowait, irq, softirq], 
+                                    ["user", "nice", "system", "idle", "iowait", "irq", "softirq"]);
       get_json("json/diskstat_total", [d_rBs, d_wBs], ["rbytes_s", "wbytes_s"]);
       get_json("json/netstat_total", [n_rBs, n_wBs], ["rbytes_s", "wbytes_s"]);
     }
@@ -97,7 +99,7 @@ $(function(){
         }
       };
     options[0]["legend"]["container"] = leg_placeholders[0];
-    options[0]["legend"]["noColumns"] = 3;
+    options[0]["legend"]["noColumns"] = 4;
     options[1]["yaxis"]["axisLabel"] = "Disk I/O";
     options[1]["legend"]["container"] = leg_placeholders[1];
     options[1]["legend"]["noColumns"] = 2;
@@ -108,7 +110,13 @@ $(function(){
     // Set up plot
     var plots = [];
     plots.push($.plot(placeholders[0], 
-          [{label:"usr",data:usr},{label:"sys",data:sys},{label:"idle", data:idle}], options[0]));
+          [{label:"usr", data:usr},
+           {label:"sys", data:sys},
+           {label:"nice", data:nice},
+           {label:"idle", data:idle},
+           {label:"iowait", data:irq},
+           {label:"iowait", data:softirq}
+           ], options[0]));
     plots.push($.plot(placeholders[1], 
           [{label:"rB/s",data:d_rBs},{label:"wB/s",data:d_wBs}], options[1]));
     plots.push($.plot(placeholders[2], 
@@ -116,9 +124,17 @@ $(function(){
 
     function update() {
       get_data();
-      plots[0].setData([{label:"usr",data:usr}, {label:"sys",data:sys}, {label:"idle",data:idle}]);
+      plots[0].setData(
+          [{label:"usr", data:usr},
+           {label:"sys", data:sys},
+           {label:"nice", data:nice},
+           {label:"idle", data:idle},
+           {label:"iowait", data:iowait},
+           {label:"irq", data:irq},
+           {label:"softirq", data:softirq}
+           ]);
       plots[1].setData([{label:"rB/s", data: d_rBs}, {label:"wB/s", data:d_wBs}]);
-      plots[2].setData([{label:"recv(B/s)", data:n_rBs}, {label:"recv(B/s)", data:n_wBs}]);
+      plots[2].setData([{label:"recv(B/s)", data:n_rBs}, {label:"send(B/s)", data:n_wBs}]);
       for(var i=0;i<plots.length; i++) {
         plots[i].setupGrid();
         plots[i].draw();
