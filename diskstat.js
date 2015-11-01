@@ -31,7 +31,7 @@ async.forever(function(callback) {
       iostat = total_iostat(fs,filename);
       r_bytes = iostat["r_bytes"] - r_bytes;
       w_bytes = iostat["w_bytes"] - w_bytes;
-      process.send({"rbytes_s":r_bytes, "wbytes_s": w_bytes});
+      process.send({"rbytes_s":r_bytes * 512, "wbytes_s": w_bytes * 512});
       setTimeout(callback, 1000);
     }
   ],callback);

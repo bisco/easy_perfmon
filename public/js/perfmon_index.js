@@ -99,7 +99,10 @@ $(function(){
         }
       };
     options[0]["legend"]["container"] = leg_placeholders[0];
-    options[0]["legend"]["noColumns"] = 4;
+    options[0]["legend"]["noColumns"] = 8;
+    options[0]["series"]["stack"] = true;
+    options[0]["series"]["lines"] = {fill: true};
+
     options[1]["yaxis"]["axisLabel"] = "Disk I/O";
     options[1]["legend"]["container"] = leg_placeholders[1];
     options[1]["legend"]["noColumns"] = 2;
