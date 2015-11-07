@@ -9,6 +9,7 @@ easy_perfmon shows server status below in real time:
 - load average: 1min average, 5min average, 15min average(not on index page)
 - disk throughput(system total): Read Byte/s(rB/s), Write Byte/s(wB/s)
 - network throughput: recv(Byte/s), send(Byte/s)
+- memory information: Used(kB), Free(kB), Cached(kB), Buffered(kB)
 
 ## How to install
 

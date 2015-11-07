@@ -1,11 +1,10 @@
 extends ./layout.jade
 
 mixin graph(title, graph_id, placeholder_id)
-  .col-xs-4.col-sm-4.placeholder
+  .col-xs-3.col-sm-3.placeholder
     h4= title
     div(id=placeholder_id).legend-placeholder
     div(id=graph_id).graph-placeholder
-    span.text-muted
     if block
       block
 
@@ -19,8 +18,8 @@ block content
   .row.placeholders 
     +graph("CPU usage",  "mpstat_total", "mpstat_legend")
     +graph("Network I/O", "netstat_total", "netstat_legend")
-    //- +graph("Load average", "loadavg", "1min", "5min", "15min")
     +graph("Disk I/O", "diskstat_total", "diskstat_legend")
+    +graph("Memory Info", "meminfo", "meminfo_legend")
 
   h2.sub-header Server Information
 

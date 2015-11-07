@@ -6,9 +6,10 @@ $(function(){
         iowait = [], irq = [], softirq = [];
     var d_rBs = [], d_wBs = [];
     var n_rBs = [], n_wBs = [];
+    var m_used = [], m_free = [], m_buf = [], m_cache = [];
     var plots = [];
-    var placeholders = ["#mpstat_total", "#diskstat_total", "#netstat_total"];
-    var leg_placeholders = ["#mpstat_legend", "#diskstat_legend", "#netstat_legend"];
+    var placeholders = ["#mpstat_total", "#diskstat_total", "#netstat_total", "#meminfo", "#loadavg"];
+    var leg_placeholders = ["#mpstat_legend", "#diskstat_legend", "#netstat_legend", "#meminfo_legend", "#loadavg_legend"];
     var _TOTAL_POINTS = 60;
 
     function get_json(url, data_ary, keys) {
@@ -31,6 +32,7 @@ $(function(){
                                     ["user", "nice", "system", "idle", "iowait", "irq", "softirq"]);
       get_json("json/diskstat_total", [d_rBs, d_wBs], ["rbytes_s", "wbytes_s"]);
       get_json("json/netstat_total", [n_rBs, n_wBs], ["rbytes_s", "wbytes_s"]);
+      get_json("json/meminfo", [m_used, m_free, m_buf, m_cache], ["MemUsed", "MemFree", "Buffers", "Cached"]);
     }
 
     // Set up the control widget
@@ -86,7 +88,7 @@ $(function(){
       return base_option;
     }
 
-    var options = [gen_base_options(), gen_base_options(), gen_base_options()];
+    var options = [gen_base_options(), gen_base_options(), gen_base_options(), gen_base_options()];
     options[0]["yaxis"]["axisLabel"] = "CPU usage";
     options[0]["yaxis"]["max"] = 100;
     options[0]["yaxis"]["min"] = 0;
@@ -106,9 +108,15 @@ $(function(){
     options[1]["yaxis"]["axisLabel"] = "Disk I/O";
     options[1]["legend"]["container"] = leg_placeholders[1];
     options[1]["legend"]["noColumns"] = 2;
+
     options[2]["yaxis"]["axisLabel"] = "Network I/O";
     options[2]["legend"]["container"] = leg_placeholders[2];
     options[2]["legend"]["noColumns"] = 2;
+
+    options[3]["yaxis"]["axisLabel"] = "Meminfo";
+    options[3]["legend"]["container"] = leg_placeholders[3];
+    options[3]["legend"]["noColumns"] = 4;
+
 
     // Set up plot
     var plots = [];
@@ -124,6 +132,10 @@ $(function(){
           [{label:"rB/s",data:d_rBs},{label:"wB/s",data:d_wBs}], options[1]));
     plots.push($.plot(placeholders[2], 
           [{label:"recv(B/s)",data:n_rBs},{label:"send(B/s)",data:n_wBs}], options[2]));
+    plots.push($.plot(placeholders[3], 
+          [{label:"MemUsed(kB)",data:m_used},{label:"MemFree(kB)",data:m_free},
+           {label:"Cached(kB)",data:m_cache},{label:"Buffers(kB)",data:m_buf}], options[3]));
+
 
     function update() {
       get_data();
@@ -138,6 +150,10 @@ $(function(){
            ]);
       plots[1].setData([{label:"rB/s", data: d_rBs}, {label:"wB/s", data:d_wBs}]);
       plots[2].setData([{label:"recv(B/s)", data:n_rBs}, {label:"send(B/s)", data:n_wBs}]);
+      plots[3].setData([{label:"used(kB)",data:m_used},{label:"free(kB)",data:m_free},
+           {label:"cach(kB)",data:m_cache},{label:"buff(kB)",data:m_buf}]);
+
+
       for(var i=0;i<plots.length; i++) {
         plots[i].setupGrid();
         plots[i].draw();
