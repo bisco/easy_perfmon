@@ -1,7 +1,7 @@
 extends ./layout.jade
 
 mixin graph(title, graph_id, placeholder_id)
-  .col-xs-3.col-sm-3.placeholder
+  .col-xs-12.col-sm-6.placeholder
     h4= title
     div(id=placeholder_id).legend-placeholder
     div(id=graph_id).graph-placeholder
@@ -17,9 +17,9 @@ block content
   h1.page-header System overview of #{hostname}
   .row.placeholders 
     +graph("CPU usage",  "mpstat_total", "mpstat_legend")
+    +graph("Memory Info", "meminfo", "meminfo_legend")
     +graph("Network I/O", "netstat_total", "netstat_legend")
     +graph("Disk I/O", "diskstat_total", "diskstat_legend")
-    +graph("Memory Info", "meminfo", "meminfo_legend")
 
   h2.sub-header Server Information
 
